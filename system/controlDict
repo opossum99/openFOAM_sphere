@@ -1,0 +1,126 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v13                                   |
+|   \\  /    A nd           | Website:  www.openfoam.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     foamRun;          // Modular solver entry point
+solver          shockFluid;
+
+startFrom       startTime;
+startTime       0;
+
+stopAt          endTime;
+endTime         3;                // Total simulation time (seconds)
+
+deltaT          1e-2;                // Small initial time step for transient
+
+writeControl    adjustableRunTime;            // 
+//writeControl    timeStep;            // Write every N time steps
+writeInterval   0.5;                   // Write every time step
+
+purgeWrite      0;
+
+writeFormat     ascii;
+writePrecision  8;
+writeCompression off;
+
+timeFormat      general;
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+maxCo           0.02;                 // Conservative CFL for shock stability
+maxDeltaT       1e-2;
+
+functions
+{
+    normalisedDensityGrad
+    {
+        type coded;
+        libs ("libutilityFunctionObjects.so");
+        name normalisedDensityGrad;
+
+        executeControl timeStep;
+        executeInterval 1;
+
+        codeInclude
+        #{
+            #include "volFields.H"
+            #include "fvcGrad.H"
+        #};
+
+        codeOptions
+        #{
+            -I$(LIB_SRC)/finiteVolume/lnInclude \
+            -I$(LIB_SRC)/OpenFOAM/lnInclude
+        #};
+
+        codeExecute
+        #{
+            const volScalarField& rho =
+                mesh().lookupObject<volScalarField>("rho");
+
+            // Compute gradient magnitude
+            volScalarField G = mag(fvc::grad(rho));
+
+            // Reference value
+            scalar Gref = max(G).value() + SMALL;
+
+            // Create and write normalised field (temporary, computed each step)
+            static volScalarField refinementFieldNorm
+            (
+                IOobject
+                (
+                    "refinementFieldNorm",
+                    mesh().time().name(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                G / Gref
+            );
+
+	    refinementFieldNorm = G / Gref;
+
+            // Write to disk so dynamicRefineFvMesh can access it
+            // refinementFieldNorm.write();
+
+            Info << "Density gradient normalized - min: " << min(refinementFieldNorm).value()
+                 << " max: " << max(refinementFieldNorm).value() << endl;
+        #};
+    }
+
+//    sphereForce
+//    {
+//        type            forces;
+//        libs            ("libforces.so");
+//    
+//        enabled         true;       //true or false
+//        log             true;       //write to screen
+//    
+//        writeControl    writeTime;
+//    
+//        patches     (sphere); // Names of patches on which to calculate forces
+//        rhoInf      1.;       // Far field density; e.g., 1.225 kg/m^3 for air
+//        CofR        (0 0 0);         // Centre of rotation; e.g., (0 0 0)
+//        // pitchAxis   <pitchAxis>;    // Pitch axis; e.g., (0 1 0)
+//    
+//        rho             rhoInf;
+//    }
+}
+
+
+// ************************************************************************* //
+
