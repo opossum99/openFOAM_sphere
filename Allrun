@@ -1,0 +1,22 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+#gmsh -3 constant/sphere_cube.geo -format msh2 -o constant/sphere_cube.msh
+
+#runApplication gmshToFoam constant/sphere_cube.msh -case .
+
+runApplication blockMesh -dict system/blockMeshDict.1
+
+touch sphere_case.foam
+
+runApplication snappyHexMesh -dict snappyHexMeshDict.1 -overwrite
+
+runApplication createPatch -dict system/createPatchDict.1 -overwrite
+
+runApplication decomposePar
+
+#runApplication foamRun
+runParallel foamRun
+
+#runApplication reconstructPar -latestTime
