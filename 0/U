@@ -16,7 +16,9 @@ FoamFile
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (0 0 0);
+U_in #calc "4*sqrt(1.4)";
+
+internalField   uniform ($U_in 0 0);
 
 boundaryField
 {
@@ -28,7 +30,7 @@ boundaryField
     inlet
     {
         type            fixedValue;
-        value           uniform (3 0 0);  // Mach 3 inlet
+        value           uniform ($U_in 0 0);  // Mach 3 inlet
     }
     
     outlet
