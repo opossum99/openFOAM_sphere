@@ -26,7 +26,7 @@ topoChanger
     mover           none;
 
     // How often to refine
-    refineInterval  10;
+    refineInterval  100;
 
     // Field to be refinement on
     field           refinementFieldNorm;

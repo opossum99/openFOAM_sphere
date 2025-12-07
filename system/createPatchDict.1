@@ -51,25 +51,25 @@ patches
         constructFrom patches;
 
         // If constructFrom = patches : names of patches. Wildcards allowed.
-        patches (maxX);
+        patches (maxX minY maxY minZ maxZ);
     }
 
-    {
-        // Name of new patch
-        name walls;
-
-        // Type of new patch
-        patchInfo
-        {
-            type wall;
-        }
-
-        // How to construct: either from 'patches' or 'set'
-        constructFrom patches;
-
-        // If constructFrom = patches : names of patches. Wildcards allowed.
-        patches (minZ maxZ minY maxY);
-    }
+//    {
+//        // Name of new patch
+//        name walls;
+//
+//        // Type of new patch
+//        patchInfo
+//        {
+//            type wall;
+//        }
+//
+//        // How to construct: either from 'patches' or 'set'
+//        constructFrom patches;
+//
+//        // If constructFrom = patches : names of patches. Wildcards allowed.
+//        patches (minZ maxZ minY maxY);
+//    }
 
     {
         // Name of new patch
