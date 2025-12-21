@@ -48,8 +48,8 @@ geometry
     refinementBox
     {
         type searchableBox;
-        min (-3 -3 -3);
-        max (3 3 3);
+        min (-2 -2 -2);
+        max (2 2 2);
     }
 };
 
@@ -122,7 +122,7 @@ castellatedMeshControls
         {
 	    // global
             // Surface-wise min and max refinement level
-            level (4 4); // 4 4
+	    level (3 3);
         }
 
     }
@@ -166,7 +166,7 @@ castellatedMeshControls
         refinementBox
         {
             mode inside;   // inside;
-            levels ((0 1));  //1E15 4
+            levels ((2 2));  //1E15 4
         }
 
         // water_plane
@@ -263,22 +263,22 @@ addLayersControls
 
         // Expansion factor for layer mesh
         //expansionRatio 1.0;
-        expansionRatio 1.2;
+        expansionRatio 1.1;
 
         // Wanted thickness of the layer furthest away from the wall.
         // If relativeSizes this is relative to undistorted size of cell
         // outside layer.
-        finalLayerThickness 0.5;
+        //finalLayerThickness 2;
 
         // Wanted thickness of the layer next to the wall.
         // If relativeSizes this is relative to undistorted size of cell
         // outside layer.
-        //firstLayerThickness 0.1;
+        firstLayerThickness 0.3;
 
         // Wanted overall thickness of layers.
         // If relativeSizes this is relative to undistorted size of cell
         // outside layer.
-        //thickness 0.5
+        // thickness 20
 
     // Minimum overall thickness of total layers. If for any reason layer
     // cannot be above minThickness do not add layer.
@@ -296,7 +296,9 @@ addLayersControls
     {
         stlSurface 
         {
-            nSurfaceLayers 5;
+            nSurfaceLayers 10;
+
+	    //thickness 0.5;
         }
     }
 

@@ -21,7 +21,7 @@ startFrom       latestTime;
 startTime       0;
 
 stopAt          endTime;
-endTime         10;                // Total simulation time (seconds)
+endTime         4.0;                // Total simulation time (seconds)
 
 deltaT          1e-2;                // Small initial time step for transient
 

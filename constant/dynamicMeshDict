@@ -17,7 +17,7 @@ FoamFile
 
 dynamicFvMesh dynamicRefineFvMesh;
 
-ftopoChanger
+topoChanger
 {
     type            refiner;
 
@@ -32,11 +32,11 @@ ftopoChanger
     field           refinementFieldNorm;
 
     // Refine field in between lower..upper
-    lowerRefineLevel 0.5;
+    lowerRefineLevel 0.7;
     upperRefineLevel 1e15;
 
     // Have slower than 2:1 refinement
-    nBufferLayers   2;
+    nBufferLayers   1;
 
     // Refine cells only up to maxRefinement levels
     maxRefinement   4;

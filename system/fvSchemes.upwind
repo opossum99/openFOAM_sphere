@@ -40,9 +40,9 @@ interpolationSchemes
 {
     default         linear;
 
-    reconstruct(rho) vanAlbada;//upwind;
-    reconstruct(U)   vanAlbada;//upwind;
-    reconstruct(T)   vanAlbada;//upwind;
+    reconstruct(rho) upwind;
+    reconstruct(U)   upwind;
+    reconstruct(T)   upwind;
 }
 
 snGradSchemes
