@@ -122,7 +122,7 @@ castellatedMeshControls
         {
 	    // global
             // Surface-wise min and max refinement level
-	    level (3 3);
+	    level (2 2);
         }
 
     }
@@ -166,7 +166,7 @@ castellatedMeshControls
         refinementBox
         {
             mode inside;   // inside;
-            levels ((2 2));  //1E15 4
+            levels ((1 1));  //1E15 4
         }
 
         // water_plane
@@ -263,7 +263,7 @@ addLayersControls
 
         // Expansion factor for layer mesh
         //expansionRatio 1.0;
-        expansionRatio 1.1;
+        expansionRatio 40.0;
 
         // Wanted thickness of the layer furthest away from the wall.
         // If relativeSizes this is relative to undistorted size of cell
@@ -296,7 +296,7 @@ addLayersControls
     {
         stlSurface 
         {
-            nSurfaceLayers 10;
+            nSurfaceLayers 15;
 
 	    //thickness 0.5;
         }

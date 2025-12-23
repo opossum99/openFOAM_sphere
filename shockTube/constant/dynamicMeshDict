@@ -26,20 +26,20 @@ topoChanger
     mover           none;
 
     // How often to refine
-    refineInterval  100;
+    refineInterval  10;
 
     // Field to be refinement on
     field           refinementFieldNorm;
 
     // Refine field in between lower..upper
-    lowerRefineLevel 0.7;
+    lowerRefineLevel 0.5;
     upperRefineLevel 1e15;
 
     // Have slower than 2:1 refinement
-    nBufferLayers   1;
+    nBufferLayers   2;
 
     // Refine cells only up to maxRefinement levels
-    maxRefinement   4;
+    maxRefinement  4;
 
     // Stop refinement if maxCells reached
     maxCells        20000000;

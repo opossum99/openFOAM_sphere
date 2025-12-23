@@ -1,0 +1,100 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      functions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//forces
+//{
+//    type            forceCoeffs;
+//    libs            ("libforces.so");
+//    writeControl    timeStep;
+//    writeInterval   1;
+//
+//    //directForceDensity true;
+//
+//    patches
+//    (
+//        sphere
+//    );
+//
+//    log         true;
+//    rhoInf      1;
+//    CofR        (0 0 0);
+//    liftDir     (0 1 0);
+//    dragDir     (1 0 0);
+//    pitchAxis   (0 0 1);
+//    magUInf     1;
+//    lRef        1;
+//    Aref        1;
+//}
+
+normalisedDensityGrad
+{
+    type coded;
+    libs ("libutilityFunctionObjects.so");
+    name normalisedDensityGrad;
+
+    executeControl timeStep;
+    executeInterval 10;
+
+    codeInclude
+    #{
+        #include "volFields.H"
+        #include "fvcGrad.H"
+    #};
+
+    codeOptions
+    #{
+        -I$(LIB_SRC)/finiteVolume/lnInclude \
+        -I$(LIB_SRC)/OpenFOAM/lnInclude
+    #};
+
+    codeExecute
+    #{
+        const volScalarField& rho =
+            mesh().lookupObject<volScalarField>("rho");
+
+        // Compute gradient magnitude
+        volScalarField G = mag(fvc::grad(rho));
+
+        // volScalarField& refinementFieldNorm = mesh().lookupObject<volScalarField>("refinementFieldNorm");
+
+        // Reference value
+        scalar Gref = max(G).value() + SMALL;
+
+        // Create and write normalised field (temporary, computed each step)
+        static volScalarField refinementFieldNorm
+        (
+            IOobject
+            (
+                "refinementFieldNorm",
+                mesh().time().name(),
+                mesh(),
+                IOobject::NO_READ,
+                IOobject::AUTO_WRITE
+            ),
+            G / Gref
+        );
+
+        refinementFieldNorm = G;// / Gref;
+
+        // Write to disk so dynamicRefineFvMesh can access it
+        // refinementFieldNorm.write();
+
+        Info << "Density gradient normalized - min: " << min(refinementFieldNorm).value()
+             << " max: " << max(refinementFieldNorm).value() << endl;
+    #};
+}
+
+// ************************************************************************* //

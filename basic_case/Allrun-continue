@@ -4,6 +4,6 @@ cd "${0%/*}" || exit                                # Run from this directory
 #------------------------------------------------------------------------------
 rm log.foamRun
 
-cp -f system/fvSchemes.vanLeer system/fvSchemes
+cp -f system/fvSchemes.vanAlbada system/fvSchemes
 
 runParallel foamRun
