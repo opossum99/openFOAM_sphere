@@ -24,9 +24,6 @@ The initial phase uses the **upwind scheme interpolation** to establish the flow
 
 ./Allrun-continue
 
-
-The van Albada limiter provides smoother reconstruction in smooth flow regions while maintaining shock-capturing capability, improving solution accuracy once the flow has settled into its primary features.
-
 ## Adaptive Mesh Refinement Strategy
 
 It is recommended to manually adjust the density gradient threshold for refinement at each iteration. As the shock develops and becomes steeper, the gradient magnitude increases, allowing for more accurate shock localization and mesh adaptation.
